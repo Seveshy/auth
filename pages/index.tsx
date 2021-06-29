@@ -5,7 +5,8 @@ import { AuthContext } from '../context/AuthContext';
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-    const { signIn } = useContext(AuthContext);
+  
+  const { signIn } = useContext(AuthContext);
   
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();

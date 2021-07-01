@@ -44,7 +44,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     roles
                  });
 
-                 api.defaults.headers['Authorization'] = `Berear ${token}`;
             })
         }
     }, [])
@@ -75,6 +74,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 permissions,
                 roles
             });
+
+            api.defaults.headers['Authorization'] = `Berear ${token}`;
 
             history.push('/dashboard');
 

@@ -1,14 +1,14 @@
 import { api } from '../services/api';
 import { createContext, ReactNode, useState } from 'react';
 import { useRouter } from 'next/router';
-import { setCookie } from 'nookies';
+import { setCookie, parseCookies } from 'nookies';
+import { useEffect } from 'react';
 
 type User = {
     email: string;
     permissions: string[];
     roles: string[];
 };
-  
 
 type SignInCredentials = {
     email: string;
@@ -30,6 +30,24 @@ export const AuthContext = createContext({} as AuthContextData)
 export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User>();
     const isAuthenticated = !!user;
+
+    useEffect(() => {
+        const { 'nextauth.token': token } = parseCookies();
+        
+        if (token) {
+            api.get('/me').then(response => {
+                const { email, permissions, roles } = response.data;
+
+                setUser({ 
+                    email, 
+                    permissions, 
+                    roles
+                 });
+
+                 api.defaults.headers['Authorization'] = `Berear ${token}`;
+            })
+        }
+    }, [])
 
     const history = useRouter();
 

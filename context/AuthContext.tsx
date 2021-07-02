@@ -1,6 +1,6 @@
 import { api } from '../services/api';
 import { createContext, ReactNode, useState } from 'react';
-import { Router, useRouter } from 'next/router';
+import Router from 'next/router';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import { useEffect } from 'react';
 
@@ -29,12 +29,10 @@ type AuthProviderProps = {
 export const AuthContext = createContext({} as AuthContextData)
 
 export function SignOut() {
-    let history = useRouter();
-
     destroyCookie(undefined, 'nextauth.token');
     destroyCookie(undefined, 'nextauth.refreshToken');
 
-    history.push('/');
+    Router.push('/')
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -62,8 +60,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 
    async function signIn({ email, password }: SignInCredentials) {
-           let history = useRouter();
-
         try {
             const response = await api.post('sessions', {
                 email, 
@@ -90,7 +86,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             api.defaults.headers['Authorization'] = `Berear ${token}`;
 
-            history.push('/dashboard');
+            Router.push('/dashboard')
 
 
         } catch (err) {

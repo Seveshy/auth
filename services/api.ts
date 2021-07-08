@@ -88,4 +88,7 @@ export function setupApiClient(ctx = undefined) {
             }
         }
     })
+
+    return api;
+
 }
